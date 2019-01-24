@@ -122,7 +122,7 @@ def go(match, iterator, coordinator, league_requirement=0):
 
     if game_finished():
         game.quit = True
-        print(f"Replay for {game.hash} already present, skipping match")
+        print(f"Game {game.hash} tagged as finished, skipping")
 
 
     #trigger is followed by events affected by modifiers

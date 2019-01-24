@@ -41,7 +41,6 @@ def go(match, iterator, coordinator, league_requirement=0):
         except:
             return False
 
-
     def db_output():
 
         try:
@@ -58,7 +57,7 @@ def go(match, iterator, coordinator, league_requirement=0):
             output_ring = None
 
 
-        if not game_saved():
+        if not game.finished:
             scores_db.c.execute("DELETE FROM scores WHERE hash = ?",(game.hash,))
             scores_db.c.execute("INSERT INTO scores VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", (game.properties["block"], game.hash, game.seed, hero.experience, json.dumps({"weapon" : output_weapon, "armor" : output_armor, "ring" : output_ring}),game.league,game.bet,json.dumps(hero.damage_table),json.dumps(hero.defense_table),game.current_block,game.finished,game.saved))
             scores_db.conn.commit()
@@ -75,12 +74,17 @@ def go(match, iterator, coordinator, league_requirement=0):
         if not os.path.exists("static/replays"):
             os.mkdir("static/replays")
 
-        if not game_saved():
+        if not game_saved() or not game.finished:
             with open (game.filename, "w") as file:
                 file.write(json.dumps(game.story))
                 scores_db.c.execute("UPDATE scores SET saved = 1 WHERE hash = ?", (game.hash,))
                 scores_db.conn.commit()
                 game.saved = True
+
+        if not hero.alive:
+            game.finished = True
+            scores_db.c.execute("UPDATE scores SET finished = 1 WHERE hash = ?", (game.hash,))
+            scores_db.conn.commit()
 
     try:
         assert ":" in match[11]
@@ -117,7 +121,6 @@ def go(match, iterator, coordinator, league_requirement=0):
     hero = classes.Hero()
 
     if game_finished():
-        game.finished = True
         game.quit = True
         print(f"Replay for {game.hash} already present, skipping match")
 
@@ -142,7 +145,6 @@ def go(match, iterator, coordinator, league_requirement=0):
     def hero_dead_check():
         if hero.health < 1:
             hero.alive = False
-            game.finished = True
             output(f"You died with {hero.experience} experience")
 
     def chaos_ring():
@@ -323,7 +325,7 @@ def go(match, iterator, coordinator, league_requirement=0):
 
         game.current_block = game.current_block + 1
 
-    if iterator == 2 and not game.saved:  # db iteration finished, now save the story (player interactions serial, based on db)
+    if iterator == 2:  # db iteration finished, now save the story (player interactions serial, based on db)
         replay_save()
 
 

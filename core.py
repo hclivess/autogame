@@ -57,7 +57,7 @@ def go(match, iterator, coordinator, league_requirement=0):
             output_ring = None
 
 
-        if not game.finished:
+        if not game_finished():
             scores_db.c.execute("DELETE FROM scores WHERE hash = ?",(game.hash,))
             scores_db.c.execute("INSERT INTO scores VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", (game.properties["block"], game.hash, game.seed, hero.experience, json.dumps({"weapon" : output_weapon, "armor" : output_armor, "ring" : output_ring}),game.league,game.bet,json.dumps(hero.damage_table),json.dumps(hero.defense_table),game.current_block,game.finished,game.saved))
             scores_db.conn.commit()
@@ -74,7 +74,7 @@ def go(match, iterator, coordinator, league_requirement=0):
         if not os.path.exists("static/replays"):
             os.mkdir("static/replays")
 
-        if not game_saved() or not game.finished:
+        if not game_saved() or not game_finished():
             with open (game.filename, "w") as file:
                 file.write(json.dumps(game.story))
                 scores_db.c.execute("UPDATE scores SET saved = 1 WHERE hash = ?", (game.hash,))

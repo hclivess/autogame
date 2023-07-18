@@ -53,12 +53,17 @@ def go(match, iterator, coordinator, league_requirement=0):
 
         if not game_finished():
             scores_db.c.execute("DELETE FROM scores WHERE hash = ?", (game.hash,))
-            scores_db.c.execute("INSERT INTO scores VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", (
+            scores_db.c.execute("INSERT INTO scores VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", (
                 game.properties["block"], game.hash, game.seed, hero.experience,
-                json.dumps({"weapon": output_weapon, "armor": output_armor, "ring": output_ring}), game.league,
+                json.dumps({"weapon": output_weapon, "armor": output_armor, "ring": output_ring}),
+                game.league,
                 game.bet,
-                json.dumps(hero.damage_table), json.dumps(hero.defense_table), game.current_block, game.finished,
-                game.saved))
+                json.dumps(hero.damage_table),
+                json.dumps(hero.defense_table),
+                game.current_block,
+                game.finished,
+                game.saved,
+                game.recipient))
             scores_db.conn.commit()
 
     def output(entry):

@@ -15,7 +15,6 @@ import sys
 
 config = classes.Config()
 sys.path.append(config.path["modules"])
-import essentials
 
 db = classes.Db(config.path["ledger"])
 scores_db = classes.ScoreDb()
@@ -93,13 +92,6 @@ def go(match, iterator, coordinator, league_requirement=0):
     except:
         recipient = match[2]
         league = match[11]
-
-    try:
-        assert essentials.address_validate(recipient)
-    except:
-        recipient = match[2]
-
-
 
     game.properties = {"seed":recipient,"block":match[0],"recipient": match[3],"amount" : match[4], "league" : league}
 

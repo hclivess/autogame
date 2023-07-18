@@ -1,6 +1,6 @@
 <title>Replay</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script >
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
 <div class="jumbotron text-center">
@@ -9,15 +9,16 @@
 
 <div class="container">
 
-{% for key, value in text.items() %}
+    {% for key, value in text.items() %}
     <p>Step {{key}} : {{value}}</p>
-{% end %}
+    {% end %}
 
-<style>
+    <style>
 p
 {
     font-family: "Anonymous Pro";
     font-size: 24px;
 }
-</style>
+
+    </style>
 </div>

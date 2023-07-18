@@ -1,6 +1,6 @@
 # autogame
 
-Bismuth autogame.  
+Bismuth autogame.
 
 A semi-deterministic game on top of Bismuth Blockchain.  
 http://bismuth.cz
@@ -28,7 +28,6 @@ https://github.com/hclivess/autogame/blob/master/leagues.md
 * run.py runs a round of the game, approx every minute, and feeds the db
 * web.py is the tournament server front end
 * .html files are Tornado templates used by the tournament server front end
-
 
 ## Tutorial
 

@@ -1,8 +1,9 @@
 class Config:
     import json
     def __init__(self):
-        with open ("config.json") as file:
+        with open("config.json") as file:
             self.path = self.json.loads(file.read())
+
 
 class Db:
     import sqlite3
@@ -11,13 +12,16 @@ class Db:
         self.conn.text_factory = str
         self.c = self.conn.cursor()
 
+
 class ScoreDb:
     import sqlite3
     def __init__(self):
         self.conn = self.sqlite3.connect("score.db")
         self.conn.text_factory = str
         self.c = self.conn.cursor()
-        self.c.execute("CREATE TABLE IF NOT EXISTS scores (block_start INTEGER, hash TEXT, seed TEXT, experience INT, inventory TEXT, league TEXT,bet TEXT, damage TEXT, defense TEXT, block_end INTEGER, finished INT2, saved INT2)")
+        self.c.execute(
+            "CREATE TABLE IF NOT EXISTS scores (block_start INTEGER, hash TEXT, seed TEXT, experience INT, inventory TEXT, league TEXT,bet TEXT, damage TEXT, defense TEXT, block_end INTEGER, finished INT2, saved INT2)")
+
 
 class Game:
 
@@ -40,29 +44,29 @@ class Game:
         self.filename_temp = None
         self.filename = None
         self.replay_exists = False
-        self.cycle={}
-        self.subcycle={}
+        self.cycle = {}
+        self.subcycle = {}
         self.bet = 0
         self.league = None
         self.coordinator = None
         self.interaction_string = "autogame:add"
         self.saved = False
 
+
 class Hero:
     def __init__(self):
         self.full_hp = 500
         self.health = self.full_hp
         self.damage = 10
-        self.damage_table = {0:self.damage}
+        self.damage_table = {0: self.damage}
 
         self.alive = True
         self.in_combat = False
         self.experience = 0
         self.pvp_interactions = 3
 
-
         self.defense = 0
-        self.defense_table = {0:self.defense}
+        self.defense_table = {0: self.defense}
 
         self.weapon = None
         self.armor = None
@@ -78,6 +82,7 @@ class Troll:
         self.alive = True
         self.requirement = 0
 
+
 class Goblin:
     def __init__(self):
         self.trigger = "df"
@@ -86,6 +91,7 @@ class Goblin:
         self.damage = 10
         self.alive = True
         self.requirement = 0
+
 
 class Berserker:
     def __init__(self):
@@ -96,6 +102,7 @@ class Berserker:
         self.alive = True
         self.requirement = 0
 
+
 class Dragon:
     def __init__(self):
         self.trigger = "61a"
@@ -105,6 +112,7 @@ class Dragon:
         self.alive = True
         self.requirement = 0
 
+
 class Fenrir:
     def __init__(self):
         self.trigger = "53b"
@@ -113,6 +121,7 @@ class Fenrir:
         self.damage = 100
         self.alive = True
         self.requirement = 0
+
 
 class Dwarf:
     def __init__(self):
@@ -124,18 +133,19 @@ class Dwarf:
         self.requirement = 0
 
 
-
 class Sword:
     def __init__(self):
         self.trigger = "70b"
         self.name = "Sword"
         self.damage = 10
 
+
 class War_hammer:
     def __init__(self):
         self.trigger = "64c"
         self.name = "War hammer"
         self.damage = 15
+
 
 class Armor:
     def __init__(self):
@@ -163,20 +173,22 @@ class ChaosRing:
 
 class HealthPotion:
     def __init__(self):
-        self.items = self.__dict__.items() #reveals class contents
+        self.items = self.__dict__.items()  # reveals class contents
         self.trigger = "3d"
         self.heal_in_combat = 5
         self.heal_not_in_combat = 15
+
 
 class Ragnarok:
     def __init__(self):
         self.trigger = "event:ragnarok"
 
+
 class PvpAttack:
     def __init__(self):
         self.trigger = "pvp:attack"
 
-#the following lists are static, changes to these are persistent across object instances
+
+# the following lists are static, changes to these are persistent across object instances
 items_interactive = [ChaosRing]
 events_interactive_global = [Ragnarok]
-

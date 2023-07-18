@@ -1,17 +1,14 @@
-#openfield demo, optional delegate: league(:delegate)
-#operation demo: autogame
-#operation demo: autogame:add
+# openfield demo, optional delegate: league(:delegate)
+# operation demo: autogame
+# operation demo: autogame:add
 
 
-import sys
-
-import time
-import classes
-import sqlite3
-import os
 import json
-from hashlib import blake2b
+import os
 import sys
+from hashlib import blake2b
+
+import classes
 
 config = classes.Config()
 sys.path.append(config.path["modules"])
@@ -20,13 +17,12 @@ db = classes.Db(config.path["ledger"])
 scores_db = classes.ScoreDb()
 
 
-
 def go(match, iterator, coordinator, league_requirement=0):
     game = classes.Game()
 
     def game_saved():
         try:
-            scores_db.c.execute("SELECT * FROM scores WHERE hash = ? AND saved = ? ",(game.hash,1,))
+            scores_db.c.execute("SELECT * FROM scores WHERE hash = ? AND saved = ? ", (game.hash, 1,))
             result = scores_db.c.fetchone()[0]
             return True
         except:
@@ -34,7 +30,7 @@ def go(match, iterator, coordinator, league_requirement=0):
 
     def game_finished():
         try:
-            scores_db.c.execute("SELECT * FROM scores WHERE hash = ? AND finished = ? ",(game.hash,1,))
+            scores_db.c.execute("SELECT * FROM scores WHERE hash = ? AND finished = ? ", (game.hash, 1,))
             result = scores_db.c.fetchone()[0]
             return True
         except:
@@ -55,12 +51,15 @@ def go(match, iterator, coordinator, league_requirement=0):
         except:
             output_ring = None
 
-
         if not game_finished():
-            scores_db.c.execute("DELETE FROM scores WHERE hash = ?",(game.hash,))
-            scores_db.c.execute("INSERT INTO scores VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", (game.properties["block"], game.hash, game.seed, hero.experience, json.dumps({"weapon" : output_weapon, "armor" : output_armor, "ring" : output_ring}),game.league,game.bet,json.dumps(hero.damage_table),json.dumps(hero.defense_table),game.current_block,game.finished,game.saved))
+            scores_db.c.execute("DELETE FROM scores WHERE hash = ?", (game.hash,))
+            scores_db.c.execute("INSERT INTO scores VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", (
+                game.properties["block"], game.hash, game.seed, hero.experience,
+                json.dumps({"weapon": output_weapon, "armor": output_armor, "ring": output_ring}), game.league,
+                game.bet,
+                json.dumps(hero.damage_table), json.dumps(hero.defense_table), game.current_block, game.finished,
+                game.saved))
             scores_db.conn.commit()
-
 
     def output(entry):
         game.step += 1
@@ -74,7 +73,7 @@ def go(match, iterator, coordinator, league_requirement=0):
             os.mkdir("static/replays")
 
         if not game_saved() or not game_finished():
-            with open (game.filename, "w") as file:
+            with open(game.filename, "w") as file:
                 file.write(json.dumps(game.story))
                 scores_db.c.execute("UPDATE scores SET saved = 1 WHERE hash = ?", (game.hash,))
                 scores_db.conn.commit()
@@ -93,7 +92,8 @@ def go(match, iterator, coordinator, league_requirement=0):
         recipient = match[2]
         league = match[11]
 
-    game.properties = {"seed":recipient,"block":match[0],"recipient": match[3],"amount" : match[4], "league" : league}
+    game.properties = {"seed": recipient, "block": match[0], "recipient": match[3], "amount": match[4],
+                       "league": league}
 
     game.start_block = game.properties["block"]
     game.recipient = game.properties["recipient"]
@@ -116,16 +116,15 @@ def go(match, iterator, coordinator, league_requirement=0):
         game.quit = True
         print(f"Game {game.hash} tagged as finished, skipping")
 
+    # trigger is followed by events affected by modifiers
 
-    #trigger is followed by events affected by modifiers
+    # define events
 
-    #define events
+    EVENTS = {game.properties["seed"][2:4]: "attack",
+              game.properties["seed"][4:6]: "attacked",
+              game.properties["seed"][6:8]: "attack_critical"}
 
-    EVENTS = {game.properties["seed"][2:4] : "attack",
-              game.properties["seed"][4:6] : "attacked",
-              game.properties["seed"][6:8] : "attack_critical"}
-
-    #define triggers
+    # define triggers
 
     def enemy_dead_check():
         if enemy.health < 1:
@@ -142,7 +141,7 @@ def go(match, iterator, coordinator, league_requirement=0):
     def chaos_ring():
         if not hero.ring:
             output(f'You see a chaos ring, the engraving says {subcycle["cycle_hash"][0:5]}')
-            if subcycle["cycle_hash"][0] in ["0","1","2","3","4"]:
+            if subcycle["cycle_hash"][0] in ["0", "1", "2", "3", "4"]:
                 hero.ring = classes.ChaosRing().roll_good()
             else:
                 hero.ring = classes.ChaosRing().roll_bad()
@@ -153,7 +152,6 @@ def go(match, iterator, coordinator, league_requirement=0):
                 hero.health = hero.full_hp
 
             output(hero.ring.string)
-
 
     def ragnarok():
         output(f"Ragnarök begins")
@@ -180,7 +178,7 @@ def go(match, iterator, coordinator, league_requirement=0):
         result = db.c.fetchall()
 
         position = 0
-        game.cycle = {} #remove previous cycle if exists
+        game.cycle = {}  # remove previous cycle if exists
         for tx in result:
             position = position + 1
 
@@ -189,15 +187,15 @@ def go(match, iterator, coordinator, league_requirement=0):
             address = tx[2]
             recipient = tx[3]
             amount = tx[4]
-            block_hash  = tx[7]
+            block_hash = tx[7]
             operation = tx[10]
             data = tx[11]
 
             cycle_hash = blake2b((str(tx)).encode(), digest_size=60).hexdigest()
 
-            game.cycle[position] = {"block_height":block_height,"timestamp":timestamp,"address":address,"recipient":recipient,":amount":amount,"block_hash":block_hash,"operation":operation,"data":data, "cycle_hash":cycle_hash}
-
-
+            game.cycle[position] = {"block_height": block_height, "timestamp": timestamp, "address": address,
+                                    "recipient": recipient, ":amount": amount, "block_hash": block_hash,
+                                    "operation": operation, "data": data, "cycle_hash": cycle_hash}
 
     def attacked():
         damage_taken = enemy.damage
@@ -218,28 +216,32 @@ def go(match, iterator, coordinator, league_requirement=0):
             game.quit = True
             break
 
-        for subposition, subcycle in game.cycle.items(): #for tx in block
-            #print (subcycle)
+        for subposition, subcycle in game.cycle.items():  # for tx in block
+            # print (subcycle)
 
             # human interaction
             for item_interactive_class in classes.items_interactive:
-                if item_interactive_class().trigger == subcycle["data"] and subcycle["address"] == game.seed and subcycle["operation"] == game.interaction_string:
+                if item_interactive_class().trigger == subcycle["data"] and subcycle["address"] == game.seed and \
+                        subcycle["operation"] == game.interaction_string:
                     if item_interactive_class == classes.ChaosRing:
                         chaos_ring()
 
-
             for events_interactive_global_class in classes.events_interactive_global:
-                if events_interactive_global_class().trigger == subcycle["data"] and subcycle["operation"] == game.interaction_string:
+                if events_interactive_global_class().trigger == subcycle["data"] and subcycle[
+                    "operation"] == game.interaction_string:
                     if events_interactive_global_class == classes.Ragnarok:
                         ragnarok()
             # human interaction
 
             if iterator == 2:
                 for pvp_class in game.pvp:
-                    if pvp_class().trigger == subcycle["data"] and subcycle["operation"] == game.interaction_string and subcycle["recipient"] == game.seed and hero.pvp_interactions > 0:
+                    if pvp_class().trigger == subcycle["data"] and subcycle["operation"] == game.interaction_string and \
+                            subcycle["recipient"] == game.seed and hero.pvp_interactions > 0:
                         attacker = subcycle["address"]
                         try:
-                            scores_db.c.execute("SELECT damage FROM scores WHERE seed = ? AND block_start <= ? AND block_end >= ? ORDER BY block_start DESC LIMIT 1",(attacker,game.current_block,game.current_block,))
+                            scores_db.c.execute(
+                                "SELECT damage FROM scores WHERE seed = ? AND block_start <= ? AND block_end >= ? ORDER BY block_start DESC LIMIT 1",
+                                (attacker, game.current_block, game.current_block,))
 
                             enemy_damage_table = json.loads(scores_db.c.fetchone()[0])
 
@@ -251,12 +253,11 @@ def go(match, iterator, coordinator, league_requirement=0):
                             hero.pvp_interactions -= 1
                             hero_dead_check()
 
-                            output(f"Player {attacker} hits you and you lose {enemy_damage - hero.defense} health down to {hero.health}")
+                            output(
+                                f"Player {attacker} hits you and you lose {enemy_damage - hero.defense} health down to {hero.health}")
 
                         except Exception:
                             output(f"Player {attacker} tried to attack you, but they failed")
-
-
 
             for potion_class in game.potions:
                 if potion_class().trigger in subcycle["cycle_hash"] and not hero.in_combat:
@@ -275,22 +276,22 @@ def go(match, iterator, coordinator, league_requirement=0):
                             hero.health = hero.full_hp
 
             for armor_class in game.armors:
-                    if armor_class().trigger in subcycle["cycle_hash"] and not hero.in_combat:
-                        if not hero.armor:
-                            hero.armor = armor_class()
-                            hero.defense += hero.armor.defense
-                            hero.defense_table[game.current_block] = hero.defense
+                if armor_class().trigger in subcycle["cycle_hash"] and not hero.in_combat:
+                    if not hero.armor:
+                        hero.armor = armor_class()
+                        hero.defense += hero.armor.defense
+                        hero.defense_table[game.current_block] = hero.defense
 
-                            output(f"You obtained {armor_class().name}")
+                        output(f"You obtained {armor_class().name}")
 
             for weapon_class in game.weapons:
-                    if weapon_class().trigger in subcycle["cycle_hash"] and not hero.in_combat:
-                        if not hero.weapon:
-                            hero.weapon = weapon_class()
-                            hero.damage += hero.weapon.damage
-                            hero.damage_table[game.current_block]=hero.damage
+                if weapon_class().trigger in subcycle["cycle_hash"] and not hero.in_combat:
+                    if not hero.weapon:
+                        hero.weapon = weapon_class()
+                        hero.damage += hero.weapon.damage
+                        hero.damage_table[game.current_block] = hero.damage
 
-                            output(f"You obtained {weapon_class().name}")
+                        output(f"You obtained {weapon_class().name}")
 
             for enemy_class in game.enemies:
                 if enemy_class().trigger in subcycle["cycle_hash"] and hero.alive and not hero.in_combat:
@@ -299,7 +300,7 @@ def go(match, iterator, coordinator, league_requirement=0):
                     output(f"You meet {enemy.name} on transaction {subposition} of block {game.current_block}")
                     hero.in_combat = True
 
-            for event_key in EVENTS: #check what happened
+            for event_key in EVENTS:  # check what happened
                 if hero.in_combat and hero.alive and not game.quit:
 
                     if event_key in subcycle["cycle_hash"] and enemy.alive:
@@ -320,11 +321,6 @@ def go(match, iterator, coordinator, league_requirement=0):
     if iterator == 2:  # db iteration finished, now save the story (player interactions serial, based on db)
         replay_save()
 
-
-
     db_output()
 
-    return game,hero
-
-
-
+    return game, hero

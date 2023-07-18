@@ -1,1 +1,4 @@
-{"ledger" : "d:/Bismuth/static/ledger.db", "modules" : "d:/Bismuth"}
+{
+  "ledger": "d:/Bismuth/static/ledger.db",
+  "modules": "d:/Bismuth"
+}

@@ -54,7 +54,10 @@ def go(match, iterator, coordinator, league_requirement=0):
         if not game_finished():
             scores_db.c.execute("DELETE FROM scores WHERE hash = ?", (game.hash,))
             scores_db.c.execute("INSERT INTO scores VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)", (
-                game.properties["block"], game.hash, game.seed, hero.experience,
+                game.properties["block"],
+                game.hash,
+                game.seed,
+                hero.experience,
                 json.dumps({"weapon": output_weapon, "armor": output_armor, "ring": output_ring}),
                 game.league,
                 game.bet,

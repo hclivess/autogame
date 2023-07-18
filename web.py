@@ -64,6 +64,7 @@ class GetApiDbHandler(tornado.web.RequestHandler):
             pass
         api_dict["block_end"] = self.db_hashes[9]
         api_dict["finished"] = self.db_hashes[10]
+        api_dict["player"] = self.db_hashes[11]
 
         print(api_dict)
         self.write(json.dumps(api_dict))

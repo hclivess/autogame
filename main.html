@@ -20,6 +20,7 @@
     <table class='table table-responsive'>
         <tr>
             <th>Start block</th>
+            <th>Player</th>
             <th>Game replay</th>
             <th>Game seed</th>
             <th>Hero experience</th>
@@ -29,6 +30,7 @@
 
         <tr>
             <td>{{top[0]}}
+            <td>{{line[11]}}
             <td><a href='/replay/{{top[1]}}'>{{top[1]}}</a>
             <td>{{top[2]}}
             <td>{{top[3]}}
@@ -43,6 +45,7 @@
     <table class='table table-responsive'>
         <tr>
             <th>Start block</th>
+            <th>Player</th>
             <th>Game replay</th>
             <th>Game seed</th>
             <th>Hero experience</th>
@@ -53,6 +56,7 @@
         {% for line in all_finished %}
         <tr>
             <td>{{line[0]}}
+            <td>{{line[11]}}
             <td><a href='/replay/{{line[1]}}'>{{line[1]}}</a>
             <td>{{line[2]}}
             <td>{{line[3]}}
@@ -70,6 +74,7 @@
     <table class='table table-responsive'>
         <tr>
             <th>Start block</th>
+            <th>Player</th>
             <th>Game replay</th>
             <th>Game seed</th>
             <th>Hero experience</th>
@@ -80,6 +85,7 @@
         {% for line in all_unfinished %}
         <tr>
             <td>{{line[0]}}
+            <td>{{line[11]}}
             <td><a href='/replay/{{line[1]}}'>{{line[1]}}</a>
             <td>{{line[2]}}
             <td>{{line[3]}}

@@ -20,7 +20,10 @@ class GetEnemyHandler(tornado.web.RequestHandler):
         for enemy in classes.Game().enemies_ragnarok:
             enemy_objects_ragnarok.append(enemy())
 
-        self.render("enemies.html", title="Enemies", enemies=enemy_objects, enemies_ragnarok=enemy_objects_ragnarok)
+        self.render("enemies.html",
+                    title="Enemies",
+                    enemies=enemy_objects,
+                    enemies_ragnarok=enemy_objects_ragnarok)
 
 
 class GetWeaponHandler(tornado.web.RequestHandler):
@@ -30,7 +33,9 @@ class GetWeaponHandler(tornado.web.RequestHandler):
         for weapon in classes.Game().weapons:
             weapon_objects.append(weapon())
 
-        self.render("weapons.html", title="Weapons", weapons=weapon_objects)
+        self.render("weapons.html",
+                    title="Weapons",
+                    weapons=weapon_objects)
 
 
 class GetApiDbHandler(tornado.web.RequestHandler):
@@ -129,8 +134,12 @@ class GetTournamentHandler(tornado.web.RequestHandler):
         if not self.all_unfinished:
             self.all_unfinished = [[dummy, "", "", "", "", ""]]
 
-        self.render("tournament.html", title=f"{league}", top=self.top, all_finished=self.all_finished,
-                    all_unfinished=self.all_unfinished, pot=self.pot)
+        self.render("tournament.html",
+                    title=f"{league}",
+                    top=self.top,
+                    all_finished=self.all_finished,
+                    all_unfinished=self.all_unfinished,
+                    pot=self.pot)
 
 
 class GetGameByIdHandler(tornado.web.RequestHandler):
@@ -138,7 +147,9 @@ class GetGameByIdHandler(tornado.web.RequestHandler):
     def get(self, hash):
         with open(f"static/replays/{hash}.json") as file:
             text = json.loads(file.read())
-        self.render("replay.html", title="Replay", text=text)
+        self.render("replay.html",
+                    title="Replay",
+                    text=text)
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -160,7 +171,10 @@ class MainHandler(tornado.web.RequestHandler):
         if not self.all_unfinished:
             self.all_unfinished = [[dummy, "", "", "", "", ""]]
 
-        self.render("main.html", title="Autogame", top=self.top, all_finished=self.all_finished,
+        self.render("main.html",
+                    title="Autogame",
+                    top=self.top,
+                    all_finished=self.all_finished,
                     all_unfinished=self.all_unfinished)
 
 

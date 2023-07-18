@@ -100,7 +100,7 @@ def go(match, iterator, coordinator, league_requirement=0):
         recipient = match[2]
         league = match[11]
 
-    game.properties = {"seed": blake2b(recipient, digest_size=56).hexdigest(),
+    game.properties = {"seed": blake2b(recipient.encode(), digest_size=24).hexdigest(),
                        "block": match[0],
                        "recipient": match[3],
                        "amount": match[4],

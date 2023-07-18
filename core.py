@@ -92,7 +92,10 @@ def go(match, iterator, coordinator, league_requirement=0):
         recipient = match[2]
         league = match[11]
 
-    game.properties = {"seed": recipient, "block": match[0], "recipient": match[3], "amount": match[4],
+    game.properties = {"seed": blake2b(recipient, digest_size=56).hexdigest(),
+                       "block": match[0],
+                       "recipient": match[3],
+                       "amount": match[4],
                        "league": league}
 
     game.start_block = game.properties["block"]

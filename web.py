@@ -118,7 +118,7 @@ class GetTournamentHandler(tornado.web.RequestHandler):
                           (league, 1))
         self.top = self.db.c.fetchone()
         if not self.top:
-            self.top = [[dummy, "", "", "", "", "", "", "", "", "", "", "", ""]]
+            self.top = [[dummy, "", "", "", "", "", "", "", "", "", "", "", "", ""]]
 
         self.db.c.execute(
             "SELECT * FROM scores WHERE league = ? AND finished = ? AND saved = ? ORDER BY block_start DESC",
@@ -126,7 +126,7 @@ class GetTournamentHandler(tornado.web.RequestHandler):
         self.all_finished = self.db.c.fetchall()
 
         if not self.all_finished:
-            self.all_finished = [[dummy, "", "", "", "", "", "", "", "", "", "", "", ""]]
+            self.all_finished = [[dummy, "", "", "", "", "", "", "", "", "", "", "", "", ""]]
 
         self.db.c.execute(
             "SELECT * FROM scores WHERE league = ? AND finished = ? and saved = ? ORDER BY block_start DESC",
@@ -134,7 +134,7 @@ class GetTournamentHandler(tornado.web.RequestHandler):
         self.all_unfinished = self.db.c.fetchall()
 
         if not self.all_unfinished:
-            self.all_unfinished = [[dummy, "", "", "", "", "", "", "", "", "", "", "", ""]]
+            self.all_unfinished = [[dummy, "", "", "", "", "", "", "", "", "", "", "", "", ""]]
 
         self.render("tournament.html",
                     title=f"{league}",
@@ -161,19 +161,19 @@ class MainHandler(tornado.web.RequestHandler):
         self.db.c.execute("SELECT * FROM scores WHERE saved = ? ORDER BY experience DESC LIMIT 1", (1,))
         self.top = self.db.c.fetchone()
         if not self.top:
-            self.top = [[dummy, "", "", "", "", "", "", "", "", "", "", "", ""]]
+            self.top = [[dummy, "", "", "", "", "", "", "", "", "", "", "", "", ""]]
 
         self.db.c.execute("SELECT * FROM scores WHERE finished = ? AND saved = ? ORDER BY block_start DESC", (1, 1,))
         self.all_finished = self.db.c.fetchall()
 
         if not self.all_finished:
-            self.all_finished = [[dummy, "", "", "", "", "", "", "", "", "", "", "", ""]]
+            self.all_finished = [[dummy, "", "", "", "", "", "", "", "", "", "", "", "", ""]]
 
         self.db.c.execute("SELECT * FROM scores WHERE finished = ? AND saved = ? ORDER BY block_start DESC", (0, 1,))
         self.all_unfinished = self.db.c.fetchall()
 
         if not self.all_unfinished:
-            self.all_unfinished = [[dummy, "", "", "", "", "", "", "", "", "", "", "", ""]]
+            self.all_unfinished = [[dummy, "", "", "", "", "", "", "", "", "", "", "", "", ""]]
 
         self.render("main.html",
                     title="Autogame",

@@ -23,7 +23,7 @@
         <tr>
 
             <td>{{top[0]}}
-            <td>{{top[11]}}
+            <td>{{top[13]}}
 
                 {% if top[10] == 1 %}
             <td><a href='/replay/{{top[1]}}'>{{top[1]}}</a>
@@ -53,7 +53,7 @@
         {% for line in all_finished %}
         <tr>
             <td>{{line[0]}}
-            <td>{{top[11]}}
+            <td>{{line[13]}}
             <td><a href='/replay/{{line[1]}}'>{{line[1]}}</a>
             <td>{{line[2]}}
             <td>{{line[3]}}
@@ -80,7 +80,7 @@
         {% for line in all_unfinished %}
         <tr>
             <td>{{line[0]}}
-            <td>{{top[11]}}
+            <td>{{line[13]}}
             <td><a href='/unfinished/{{line[1]}}'>{{line[1]}}</a>
             <td>{{line[2]}}
             <td>{{line[3]}}

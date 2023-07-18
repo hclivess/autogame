@@ -3,12 +3,13 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+<div>
 
 <div class="jumbotron text-center">
     <h1>Pot of "{{title}}": {{pot}}</h1>
 </div>
 
-<div class="container">
+<div>
     <h2>Top Player:</h2>
     <table class='table table-responsive'>
         <tr>
@@ -22,19 +23,18 @@
 
         <tr>
 
-            <td>{{top[0]}}
+            <td>{{top[0]}}</td>
             <td>{{top[12]}}
 
-                {% if top[10] == 1 %}
+                {% if top[10] == 1 %}</td>
             <td><a href='/replay/{{top[1]}}'>{{top[1]}}</a>
-                {% else %}
+                {% else %}</td>
             <td><a href='/unfinished/{{top[1]}}'>{{top[1]}}</a>
-                {% end %}
+                {% end %}</td>
 
-            <td>{{top[2]}}
-            <td>{{top[3]}}
-            <td>{{top[4]}}
-            </td>
+            <td>{{top[2]}}</td>
+            <td>{{top[3]}}</td>
+            <td>{{top[4]}}</td>
         </tr>
     </table>
 
@@ -52,13 +52,12 @@
 
         {% for line in all_finished %}
         <tr>
-            <td>{{line[0]}}
-            <td>{{line[12]}}
-            <td><a href='/replay/{{line[1]}}'>{{line[1]}}</a>
-            <td>{{line[2]}}
-            <td>{{line[3]}}
-            <td>{{line[4]}}
-            </td>
+            <td>{{line[0]}}</td>
+            <td>{{line[12]}}</td>
+            <td><a href='/replay/{{line[1]}}'>{{line[1]}}</a></td>
+            <td>{{line[2]}}</td>
+            <td>{{line[3]}}</td>
+            <td>{{line[4]}}</td>
         </tr>
         {% end %}
 
@@ -79,14 +78,14 @@
 
         {% for line in all_unfinished %}
         <tr>
-            <td>{{line[0]}}
-            <td>{{line[12]}}
-            <td><a href='/unfinished/{{line[1]}}'>{{line[1]}}</a>
-            <td>{{line[2]}}
-            <td>{{line[3]}}
-            <td>{{line[4]}}
-            </td>
+            <td>{{line[0]}}</td>
+            <td>{{line[12]}}</td>
+            <td><a href='/unfinished/{{line[1]}}'>{{line[1]}}</a></td>
+            <td>{{line[2]}}</td>
+            <td>{{line[3]}}</td>
+            <td>{{line[4]}}</td>
         </tr>
         {% end %}
     </table>
+</div>
 </div>

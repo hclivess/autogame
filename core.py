@@ -66,7 +66,7 @@ def go(match, iterator, coordinator, league_requirement=0):
                 game.current_block,
                 game.finished,
                 game.saved,
-                game.recipient))
+                game.player))
             scores_db.conn.commit()
 
     def output(entry):
@@ -103,11 +103,13 @@ def go(match, iterator, coordinator, league_requirement=0):
     game.properties = {"seed": blake2b(recipient.encode(), digest_size=24).hexdigest(),
                        "block": match[0],
                        "recipient": recipient,
+                       "player": match[2],
                        "amount": match[4],
                        "league": league}
 
     game.start_block = game.properties["block"]
     game.recipient = game.properties["recipient"]
+    game.player = game.properties["player"]
     game.bet = game.properties["amount"]
     game.current_block = game.start_block
     game.seed = game.properties["seed"]
